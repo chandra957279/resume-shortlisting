@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AI Resume ATS</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        body {
+            background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .hero {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-weight: bold;
+            font-size: 42px;
+        }
+
+        .hero p {
+            color: #555;
+        }
+
+        /* 🔥 CARD STYLE */
+        .upload-card {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        /* INPUT */
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        /* BUTTON */
+        .btn-custom {
+            background: linear-gradient(45deg, #000, #444);
+            color: #fff;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-custom:hover {
+            transform: scale(1.03);
+            background: linear-gradient(45deg, #222, #000);
+        }
+
+        /* LOADING */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="hero">
+        <h1>🚀 AI Resume ATS Scanner</h1>
+        <p>Get your resume analyzed like real corporate ATS</p>
+    </div>
+
+    <!-- CARD -->
+    <div class="upload-card">
+
+        <form id="uploadForm" action="/uploadResume" method="post" enctype="multipart/form-data">
+
+            <!-- FILE -->
+            <div class="mb-3">
+                <label class="form-label">Upload Resume</label>
+                <input type="file" class="form-control" name="file" required>
+            </div>
+
+            <!-- ROLE -->
+            <div class="mb-3">
+                <label class="form-label">Select Role</label>
+                <select class="form-select" name="role" required>
+                    <option value="">Choose Role</option>
+                    <option value="JAVA_DEVELOPER">Java Developer</option>
+                    <option value="PYTHON_DEVELOPER">Python Developer</option>
+                    <option value="DEVOPS_ENGINEER">DevOps Engineer</option>
+                </select>
+            </div>
+
+            <!-- BUTTON -->
+            <button type="submit" class="btn btn-custom w-100">
+                Analyze Resume
+            </button>
+
+        </form>
+
+        <!-- LOADING -->
+        <div id="loading" class="loading">
+            🤖 Analyzing Resume...
+        </div>
+
+    </div>
+
+</div>
+
+<!-- 🔥 SCRIPT -->
+<script>
+
+document.getElementById("uploadForm").addEventListener("submit", function() {
+    document.getElementById("loading").style.display = "block";
+});
+
+</script>
+
+</body>
+</html>
