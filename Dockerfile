@@ -1,18 +1,14 @@
-<<<<<<< HEAD
-FROM eclipse-temurin:17-jdk-alpine
+# Stage 1: Build JAR
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+
 WORKDIR /app
-COPY target/invogent-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
-=======
-# Use Java 17
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run app
 FROM eclipse-temurin:17-jdk-alpine
 
-# Set working directory
 WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Copy jar file
-COPY target/invogent-0.0.1-SNAPSHOT.jar app.jar
-
-# Run application
 ENTRYPOINT ["java", "-jar", "app.jar"]
->>>>>>> 4e1d3a721c5908c2f987195dfbb3b6598db2077b
