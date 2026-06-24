@@ -1,141 +1,289 @@
+```html
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>ATS Dashboard</title>
+    <title>AI Resume ATS Scanner</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        body {
-            background: #f5f7fa;
+
+        body{
+            background:#f4f7fb;
+            font-family:'Segoe UI',sans-serif;
         }
 
-        h2 {
-            font-size: clamp(22px, 4vw, 32px);
+        .hero-section{
+            text-align:center;
+            margin-bottom:40px;
         }
 
-        .card {
-            border-radius: 12px;
+        .hero-section h1{
+            font-size:clamp(28px,5vw,48px);
+            font-weight:700;
+            color:#111827;
         }
 
-        .circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            background: conic-gradient(#4caf50 0deg, #ddd 0deg);
+        .hero-section p{
+            color:#6b7280;
+            font-size:18px;
         }
 
-        .circle h4 {
-            margin: 0;
-            font-size: 20px;
+        .card{
+            border:none;
+            border-radius:20px;
+            box-shadow:0 10px 25px rgba(0,0,0,.08);
         }
 
-        ul {
-            list-style: none;
-            padding-left: 0;
+        .stat-card{
+            text-align:center;
+            padding:30px;
+            height:100%;
         }
 
-        /* Mobile fix */
-        @media (max-width: 576px) {
-            .circle {
-                width: 90px;
-                height: 90px;
+        .stat-number{
+            font-size:42px;
+            font-weight:700;
+            color:#111827;
+        }
+
+        .stat-title{
+            color:#6b7280;
+            font-size:16px;
+        }
+
+        .skill-badge{
+            display:inline-block;
+            padding:10px 18px;
+            margin:5px;
+            border-radius:50px;
+            font-size:14px;
+            font-weight:600;
+        }
+
+        .matched{
+            background:#d1fae5;
+            color:#065f46;
+        }
+
+        .missing{
+            background:#fee2e2;
+            color:#991b1b;
+        }
+
+        .progress{
+            height:30px;
+            border-radius:30px;
+        }
+
+        .progress-bar{
+            font-weight:600;
+            font-size:14px;
+        }
+
+        .summary-card p{
+            margin-bottom:8px;
+        }
+
+        .btn{
+            padding:12px 25px;
+            border-radius:12px;
+            font-weight:600;
+        }
+
+        @media(max-width:768px){
+
+            .stat-number{
+                font-size:32px;
+            }
+
+            .hero-section p{
+                font-size:15px;
+            }
+
+            .skill-badge{
+                font-size:13px;
+                padding:8px 14px;
             }
         }
+
     </style>
+
 </head>
 
 <body>
 
-<div class="container py-4">
+<div class="container py-5">
 
-    <h2 class="text-center mb-4">🚀 ATS Resume Dashboard</h2>
+    <!-- HEADER -->
+
+    <div class="hero-section">
+
+        <h1>🚀 AI Resume ATS Scanner</h1>
+
+        <p>Resume Analysis Report</p>
+
+    </div>
 
     <!-- STATS -->
-    <div class="row text-center mb-4 g-3">
 
-        <div class="col-4">
-            <div class="circle" data-value="[[${score}]]">
-                <h4>[[${score}]]%</h4>
-                <small>Score</small>
+    <div class="row g-4 mb-4">
+
+        <div class="col-12 col-sm-6 col-lg-4">
+
+            <div class="card stat-card">
+
+                <div class="stat-number">
+                    [[${score}]]%
+                </div>
+
+                <div class="stat-title">
+                    ATS Score
+                </div>
+
             </div>
+
         </div>
 
-        <div class="col-4">
-            <div class="circle" data-value="[[${projectCount * 20}]]">
-                <h4>[[${projectCount}]]</h4>
-                <small>Projects</small>
+        <div class="col-12 col-sm-6 col-lg-4">
+
+            <div class="card stat-card">
+
+                <div class="stat-number">
+                    [[${projectCount}]]
+                </div>
+
+                <div class="stat-title">
+                    Projects
+                </div>
+
             </div>
+
         </div>
 
-        <div class="col-4">
-            <div class="circle" data-value="[[${experience * 20}]]">
-                <h4>[[${experience}]] yr</h4>
-                <small>Experience</small>
+        <div class="col-12 col-lg-4">
+
+            <div class="card stat-card">
+
+                <div class="stat-number">
+                    [[${experience}]] Yr
+                </div>
+
+                <div class="stat-title">
+                    Experience
+                </div>
+
             </div>
+
+        </div>
+
+    </div>
+
+    <!-- ATS SCORE BAR -->
+
+    <div class="card p-4 mb-4">
+
+        <h5 class="mb-3">ATS Match Score</h5>
+
+        <div class="progress">
+
+            <div class="progress-bar bg-success"
+                 role="progressbar"
+                 th:style="'width:'+${score}+'%'">
+
+                [[${score}]]%
+
+            </div>
+
         </div>
 
     </div>
 
     <!-- SKILLS -->
-    <div class="row g-3">
 
-        <div class="col-12 col-md-6">
-            <div class="card shadow p-3">
-                <h5 class="text-success">✅ Matched Skills</h5>
-                <ul>
-                    <li th:each="skill : ${matchedSkills}" class="text-success">
-                        ✔ <span th:text="${skill}"></span>
-                    </li>
-                </ul>
+    <div class="row g-4">
+
+        <div class="col-12 col-lg-6">
+
+            <div class="card p-4 h-100">
+
+                <h5 class="text-success mb-3">
+                    ✅ Matched Skills
+                </h5>
+
+                <span class="skill-badge matched"
+                      th:each="skill : ${matchedSkills}"
+                      th:text="${skill}">
+                </span>
+
             </div>
+
         </div>
 
-        <div class="col-12 col-md-6">
-            <div class="card shadow p-3">
-                <h5 class="text-danger">❌ Missing Skills</h5>
-                <ul>
-                    <li th:each="skill : ${missingSkills}" class="text-danger">
-                        ✘ <span th:text="${skill}"></span>
-                    </li>
-                </ul>
+        <div class="col-12 col-lg-6">
+
+            <div class="card p-4 h-100">
+
+                <h5 class="text-danger mb-3">
+                    ❌ Missing Skills
+                </h5>
+
+                <span class="skill-badge missing"
+                      th:each="skill : ${missingSkills}"
+                      th:text="${skill}">
+                </span>
+
             </div>
+
         </div>
+
+    </div>
+
+    <!-- SUMMARY -->
+
+    <div class="card summary-card p-4 mt-4">
+
+        <h4>Candidate Summary</h4>
+
+        <p>
+            ATS Score:
+            <strong>[[${score}]]%</strong>
+        </p>
+
+        <p>
+            Projects:
+            <strong>[[${projectCount}]]</strong>
+        </p>
+
+        <p>
+            Experience:
+            <strong>[[${experience}]] Years</strong>
+        </p>
+
+        <p class="text-muted mt-3">
+            Resume analyzed successfully using AI-powered ATS Engine.
+        </p>
 
     </div>
 
     <!-- BUTTONS -->
+
     <div class="text-center mt-4">
-        <a href="/" class="btn btn-primary mb-2">Scan Another</a>
-        <a href="/downloadPdf" class="btn btn-success mb-2">Download PDF</a>
+
+        <a href="/" class="btn btn-primary me-2">
+            Scan Another
+        </a>
+
+        <a href="/downloadPdf" class="btn btn-success">
+            Download PDF
+        </a>
+
     </div>
 
 </div>
 
-<script>
-document.querySelectorAll(".circle").forEach(circle => {
-    let value = circle.getAttribute("data-value");
-    let current = 0;
-
-    let interval = setInterval(() => {
-        if (current >= value) {
-            clearInterval(interval);
-        } else {
-            current++;
-            circle.style.background =
-                `conic-gradient(#4caf50 ${current * 3.6}deg, #ddd 0deg)`;
-        }
-    }, 15);
-});
-</script>
-
 </body>
 </html>
+```
